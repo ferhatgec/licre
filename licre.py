@@ -16,6 +16,7 @@ from json import loads
 from datetime import datetime
 from requests import get
 from sys import argv
+from getpass import getuser
 
 license_api = 'https://api.github.com/licenses/{license}'
 
@@ -77,7 +78,10 @@ if len(argv) < 2:
 if len(argv) > 2:
     author = argv[2]
 else:
-    author = ''
+    author = getuser()
+
+    if len(author) < 1:
+        author = '[fullname]'
 
 if len(argv) > 3:
     year = int(argv[3])
