@@ -17,6 +17,7 @@ from datetime import datetime
 from requests import get
 from sys import argv
 from getpass import getuser
+from os import remove, path
 
 license_api = 'https://api.github.com/licenses/{license}'
 
@@ -68,6 +69,18 @@ class LiCre:
         self.get_data()
         self.replace()
 
+        if not (path.isdir('.git') or path.isdir('.hg')):
+            print('Here has not any VCS initializer (git init)')
+
+        if path.isfile('LICENSE'):
+            remove('LICENSE')
+
+        with open('LICENSE', 'w') as license_file:
+            license_file.write(self.license_data)
+
+        if path.isfile('LICENSE'):
+            print(f'{self.license_name.upper()} license created with \'{self.author}\' | {self.year} infos.')
+
 if len(argv) < 2:
     print('LiCre (License Creator)\n'
           '----\n' +
@@ -90,5 +103,3 @@ else:
 
 init = LiCre()
 init.initialize(argv[1], author, year)
-
-print(init.license_data)
