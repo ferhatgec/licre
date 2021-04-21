@@ -81,6 +81,15 @@ class LiCre:
         if path.isfile('LICENSE'):
             print(f'{self.license_name.upper()} license created with \'{self.author}\' | {self.year} infos.')
 
+    def check(self):
+        current_dir = path.dirname(path.realpath(__file__)).split('/')[-1]
+
+        if len(current_dir) < 1:
+            exit(1)
+
+        if get(f'http://github.com/{getuser()}/{current_dir}/blob/master/LICENSE').status_code < 400:
+            print('Hahaha. You have already a LICENSE file')
+
 if len(argv) < 2:
     print('LiCre (License Creator)\n'
           '----\n' +
@@ -96,6 +105,9 @@ else:
     if len(author) < 1:
         author = '[fullname]'
 
+for i in argv:
+    print(i)
+
 if len(argv) > 3:
     year = int(argv[3])
 else:
@@ -103,3 +115,5 @@ else:
 
 init = LiCre()
 init.initialize(argv[1], author, year)
+
+init.check()
